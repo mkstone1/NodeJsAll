@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marks Timeproject</title>
+    <style>
+      body {
+        display: flex;
+        background-color: rgb(146, 181, 255);
+        color: rgb(0, 0, 0);
+        align-items: center;
+        flex-direction: column;
+        
+      }
+
+      #gameInfo {
+        margin-top: 100px;
+      }
+
+      #countDownGame{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h2>When is your birthday?</h2>
+    <input type="date" id="inputDatePicker" />
+    <div id="inputDivHolder"></div>
+    <div id="countDownCloak"></div>
+    <div id ="gameInfo"></div>
+    <h2>TIME GAME!!!</h2>
+    <p>try and stop the timer at 5</p>
+    </div>
+    <div id="countDownGame">
+
+    </div>
+
+    <script>
+      //updates clock every second
+      setInterval(updateClock, 1000);
+
+      function updateClock() {
+        //get date picked and elements for updating
+        const countDownCloak = document.getElementById("countDownCloak");
+        const inputValue = document.getElementById("inputDatePicker");
+        const inputDate = inputValue.valueAsDate;
+
+        //get current date
+        const now = new Date();
+
+        //calculate time left
+        const timeLeft = inputDate - now;
+        const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hoursLeft = Math.floor(
+          (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutesLeft = Math.floor(
+          (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        //check if we need to add text
+        const inputDivHolder = document.getElementById("inputDivHolder");
+        if (inputDivHolder.children.length < 1) {
+          const textParagraf = document.createElement("p");
+          textParagraf.innerText = "Your birthday is in:";
+          inputDivHolder.appendChild(textParagraf);
+        }
+
+        //update countdown
+        countDownCloak.innerText = `${daysLeft} days  ${hoursLeft} hours ${minutesLeft} minuts ${secondsLeft}`;
+      }
+    </script>
+
+    <script>
+        //Needs to add function to increate/decrease diffculty
+
+      let hasGameStarted = false;
+      const gameDiv = document.getElementById("countDownGame");
+   
+      var startTime = 10;
+      setupGame()
+
+      
+      function setupGame(){
+        startTime = 10;
+        
+        const startGameButton = document.createElement("button");
+        startGameButton.id = "startGameButton"
+        startGameButton.onclick = startGame;
+        startGameButton.innerText = "Start game";
+
+        const timerDiv = document.createElement("div");
+         timerDiv.id = "timerDiv";
+      
+       timerDiv.innerText = startTime;
+       
+       gameDiv.appendChild(timerDiv);
+       gameDiv.appendChild(startGameButton);
+      }
+      
+
+    
+
+      
+
+      function startGame() {
+        if (!hasGameStarted) {
+          updateTimer = setInterval(decreateTimer, 100);
+
+          gameDiv.removeChild(document.getElementById("startGameButton"));
+          const stopGameButton = document.createElement("button");
+          stopGameButton.id = "stopGameButton"
+
+          stopGameButton.innerText = "Stop";
+          stopGameButton.onclick = stopGame;
+          gameDiv.appendChild(stopGameButton);
+
+          hasGameStarted = true;
+        }
+      }
+
+      function stopGame() {
+        hasGameStarted = false;
+        clearInterval(updateTimer);
+        checkResult();
+      }
+
+      function checkResult() {
+        const result = Number(document.getElementById("timerDiv").innerText);
+        const restartGameButton = document.createElement("button")
+        restartGameButton.innerText = "Restart game"
+        restartGameButton.onclick = restartGame
+        restartGameButton.id = "restartGameButton"
+        gameDiv.appendChild(restartGameButton)
+        if(!(result == 10)){
+            const loserText = document.createElement("h1")
+            loserText.innerText = "YOU HAVE FAILED"
+            gameDiv.appendChild(loserText)
+            gameDiv.removeChild(stopGameButton);
+            gameDiv.removeChild(timerDiv)
+
+
+            const resultText = document.createElement("p");
+            resultText.innerText = "You hit " + result + " and was supposed to hit 5"
+            gameDiv.appendChild(resultText)
+
+       
+            
+        }
+        else{
+            gameDiv.removeChild(stopGameButton);
+            gameDiv.removeChild(timerDiv)
+            
+            const winnerText = document.createElement("h1")
+            winnerText.innerText = "YOU WIN!!!!!!!!!!!!!!! WOW YOU ARE THE BEST!!!!!"
+            gameDiv.appendChild(winnerText)
+
+        }
+    
+      }
+
+      function restartGame(){
+        gameDiv.innerHTML = ""
+        setupGame()
+
+      }
+
+      function decreateTimer() {
+        startTime -= 0.1;
+        timerDiv.innerText = startTime.toFixed(1);
+      }
+
+
+    </script>
+  </body>
+</html>
