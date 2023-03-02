@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 /* API */
 
 
-const PORT = 8080;
+const PORT = 5000;
 app.listen(PORT, (error) => {
     if (error) {
         console.log(error);
@@ -25,3 +25,5 @@ app.listen(PORT, (error) => {
     }
     console.log("Server is running on port", PORT);
 });
+
+module.exports = app;
